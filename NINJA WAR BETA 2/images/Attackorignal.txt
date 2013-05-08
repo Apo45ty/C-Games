@@ -1,0 +1,32 @@
+
+           
+           /*if(ImageY==right)    
+           {        
+                masked_blit(PlayerAttacks,buffer,20,0,x+15,y+10,20,20);
+                if(map[x/SizeOfSpaceperMAtrix+1][y/SizeOfSpaceperMAtrix]>0||abs(BossX-x)<=32&&milles>=BossDistance)
+                {   
+                   if(milles<BossDistance)                                                         
+                   EnemiesLifewith[ map[x/SizeOfSpaceperMAtrix+1][y/SizeOfSpaceperMAtrix] ]-=PlayerAttack;
+                   else
+                   BossLife-=PlayerAttack;
+                   masked_blit(PlayerAttacks,buffer,146,3,x+32,y-15,27,15);
+                }
+                else
+                masked_blit(PlayerAttacks,buffer,146,17,x+32,y-15,30,20);
+           }
+           else
+           if(x/SizeOfSpaceperMAtrix>0&&ImageY==left)
+           {
+                masked_blit(PlayerAttacks,buffer,0,0,x-5,y+10,20,20); 
+                if(map[x/SizeOfSpaceperMAtrix-1][y/SizeOfSpaceperMAtrix]>0||abs(BossX-x)<=32&&milles>=BossDistance)
+                {
+                   masked_blit(PlayerAttacks,buffer,146,3,x-32,y-15,27,15);
+                   if(milles<BossDistance)
+                   EnemiesLifewith[ map[x/SizeOfSpaceperMAtrix -1 ][y/SizeOfSpaceperMAtrix] ]-=PlayerAttack;        
+                   else
+                   BossLife-=PlayerAttack;
+                }
+                else
+                masked_blit(PlayerAttacks,buffer,146,17,x-32,y-15,30,20);
+           }*/
+          
