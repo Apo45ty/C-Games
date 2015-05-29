@@ -1,0 +1,1769 @@
+#include<stdlib.h>
+#include<ctype.h>
+#include<stdio.h>
+#include<math.h>
+#include<time.h>
+#include<windows.h>
+#include<conio.h>
+#include<curses.h>
+
+void wait ( float seconds ) {
+  clock_t endwait;
+  endwait = clock () + seconds * CLK_TCK ;
+  
+  while (clock() < endwait) {
+  }
+}
+
+int endturnoptions()
+{
+                    int k=0, xm=0,i=0;
+                    do{
+                        for(i=9;i<16;i++)
+                        {
+                        mvaddstr (18+xm,i,"-");
+                        mvaddstr (20+xm,i,"-");
+                        }
+                        
+                        if(xm==0)
+                        {
+                                 mvaddstr (19,9,"End    ");
+                                 mvaddstr (21,9,"       ");
+                                 mvaddstr (22,9,"       ");
+                                 mvaddstr (23,9,"Exit   ");
+                        }
+                        if(xm==1)
+                        {
+                                 mvaddstr (18,9,"End    ");
+                                 mvaddstr (20,9,"       ");
+                                 mvaddstr (22,9,"       ");
+                                 mvaddstr (23,9,"Exit   ");
+                        }
+                        if(xm==2)
+                        {
+                                 mvaddstr (18,9,"End    ");
+                                 mvaddstr (19,9,"       ");
+                                 mvaddstr (21,9,"       ");
+                                 mvaddstr (23,9,"Exit   ");
+                                 }
+                        if(xm==3)
+                        {
+                                 mvaddstr (18,9,"End    ");
+                                 mvaddstr (19,9,"       ");
+                                 mvaddstr (20,9,"       ");
+                                 mvaddstr (22,9,"Exit   ");
+                                 }
+                        
+                        k=getch();
+                        
+                        if(k==KEY_DOWN&&xm<3)
+                                             xm++;
+                        
+                        if(k==KEY_UP&&xm>0)
+                                           xm--;
+                        if(k==VK_SPACE&&xm==0)
+                        {
+                                              return 101;
+                                              }
+                        
+                        }while(k!=VK_SPACE||xm!=3);
+                        
+    
+}
+
+
+
+void player1(int x,int y,int xold,int yold)
+{
+                 //drawing player 1
+                  //erazing his footsetps
+                  mvaddstr (xold,yold," ");
+                  mvaddstr (0,yold," ");
+                  mvaddstr (xold,0," ");
+                  //player 1  
+                  mvaddstr (x,y,"1");              
+                  mvaddstr (0,y,"v");
+                  mvaddstr (x,0,">");
+     }
+
+      char map[15][77]={
+//col 000000000011111111112222222222333333333344444444445555555555666666666677777777  
+//lum 012345678901234567890123456789012345678901234567890123456789012345678901234567  row 
+     "                                                                             ",//00
+     "                  N                                                          ",//01
+     "                                                                             ",//02
+     "                                                                             ",//03
+     "                  N                                                          ",//04
+     "NB                                                                         PN",//05
+     "P                                                                         P  ",//06
+     "A                                                                          P0",//07
+     "                                                                          P  ",//08
+     "                                                                           P ",//09
+     "                                                                             ",//10
+     "                                                                             ",//11
+     "                                                                             ",//12
+     "                                                                             ",//13
+     "                                                                             ",//14
+     };
+     
+     char AImap[15][77]={
+//col 000000000011111111112222222222333333333344444444445555555555666666666677777777  
+//lum 012345678901234567890123456789012345678901234567890123456789012345678901234567  row 
+     "                                                                             ",//00
+     "                                                                             ",//01
+     "                                                                             ",//02
+     "                                                                             ",//03
+     "                                                                             ",//04
+     "                                                                             ",//05
+     "                                                                             ",//06
+     "                                                                             ",//07
+     "                                                                             ",//08
+     "                                                                             ",//09
+     "                                                                             ",//10
+     "                                                                             ",//11
+     "                                                                             ",//12
+     "                                                                             ",//13
+     "                                                                             ",//14
+     };
+bool enemygunsoldier(int x,int y)
+{
+     if(map[x-2][y-2]=='P'||map[x-2][y-2]=='Q'||map[x-2][y-2]=='R'||map[x-2][y-2]=='S'||map[x-2][y-2]=='T'||map[x-2][y-2]=='V'||map[x-2][y-2]=='U'||map[x-2][y-2]=='W'||map[x-2][y-2]=='X'||map[x-2][y-2]=='Y'||map[x-2][y-2]=='Z'||map[x-2][y-2]=='['||map[x-2][y-2]=='p'||map[x-2][y-2]=='q'||map[x-2][y-2]=='r'||map[x-2][y-2]=='s'||map[x-2][y-2]=='t'||map[x-2][y-2]=='u'||map[x-2][y-2]=='v'||map[x-2][y-2]=='w'||map[x-2][y-2]=='x'||map[x-2][y-2]=='y'||map[x-2][y-2]=='z'||map[x-2][y-2]=='[')
+     return TRUE;
+     else
+     return FALSE;
+}
+bool gunsoldier(int x,int y)
+{
+     if(map[x-2][y-2]=='B'||map[x-2][y-2]=='C'||map[x-2][y-2]=='D'||map[x-2][y-2]=='E'||map[x-2][y-2]=='F'||map[x-2][y-2]=='G'||map[x-2][y-2]=='H'||map[x-2][y-2]=='I'||map[x-2][y-2]=='J'||map[x-2][y-2]=='K'||map[x-2][y-2]=='L'||map[x-2][y-2]=='M'||map[x-2][y-2]=='b'||map[x-2][y-2]=='c'||map[x-2][y-2]=='d'||map[x-2][y-2]=='e'||map[x-2][y-2]=='f'||map[x-2][y-2]=='g'||map[x-2][y-2]=='h'||map[x-2][y-2]=='i'||map[x-2][y-2]=='j'||map[x-2][y-2]=='k'||map[x-2][y-2]=='l'||map[x-2][y-2]=='m')
+     return TRUE;
+     else
+     return FALSE;
+ }
+
+int optionsplayer1(int x, int y, bool menuscreen)
+{
+    /*
+                       return  option
+                        1      hqmove
+                        2      piece move
+                        3      piece attack
+                       */
+                        int k;
+                        int xm=0,i=0;
+                        //options player 1
+                        if(menuscreen)
+                        {
+                        if(map[x-2][y-2]!='A')    
+                        do{
+                        for(i=9;i<16;i++)
+                        {
+                        mvaddstr (18+xm,i,"-");
+                        mvaddstr (20+xm,i,"-");
+                        }
+                        
+                        if(xm==0)
+                        {
+                                 mvaddstr (19,9,"Attack ");
+                                 mvaddstr (21,9,"Move   ");
+                                 mvaddstr (22,9,"Special");
+                                 mvaddstr (23,9,"Exit   ");
+                        }
+                        if(xm==1)
+                        {
+                                 mvaddstr (18,9,"Attack ");
+                                 mvaddstr (20,9,"Move   ");
+                                 mvaddstr (22,9,"Special");
+                                 mvaddstr (23,9,"Exit   ");
+                        }
+                        if(xm==2)
+                        {
+                                 mvaddstr (18,9,"Attack ");
+                                 mvaddstr (19,9,"Move   ");
+                                 mvaddstr (21,9,"Special");
+                                 mvaddstr (23,9,"Exit   ");
+                                 }
+                        if(xm==3)
+                        {
+                                 mvaddstr (18,9,"Attack ");
+                                 mvaddstr (19,9,"Move   ");
+                                 mvaddstr (20,9,"Special");
+                                 mvaddstr (22,9,"Exit   ");
+                                 }
+                        
+                        k=getch();
+                        
+                        if(k==KEY_DOWN&&xm<3)
+                                             xm++;
+                        
+                        if(k==KEY_UP&&xm>0)
+                                           xm--;
+                        if(k==VK_SPACE&&xm==1)
+                        {
+                                              return 2;
+                                              }
+                        if(k==VK_SPACE&&xm==0)
+                        {
+                                              return 3;
+                                              }
+                        }while(k!=VK_SPACE||xm!=3);
+                        else
+                            do{
+                            for(i=9;i<16;i++)
+                            {
+                            mvaddstr (18+xm,i,"-");
+                            mvaddstr (20+xm,i,"-");
+                             }
+                        
+                        if(xm==0)
+                        {
+                                 mvaddstr (19,9,"Create ");
+                                 mvaddstr (21,9,"Move   ");
+                                 mvaddstr (22,9,"Special");
+                                 mvaddstr (23,9,"Exit   ");
+                        }
+                        if(xm==1)
+                        {
+                                 mvaddstr (18,9,"Create ");
+                                 mvaddstr (20,9,"Move   ");
+                                 mvaddstr (22,9,"Special");
+                                 mvaddstr (23,9,"Exit   ");
+                        }
+                        if(xm==2)
+                        {
+                                 mvaddstr (18,9,"Create ");
+                                 mvaddstr (19,9,"Move   ");
+                                 mvaddstr (21,9,"Special");
+                                 mvaddstr (23,9,"Exit   ");
+                                 }
+                        if(xm==3)
+                        {
+                                 mvaddstr (18,9,"Create ");
+                                 mvaddstr (19,9,"Move   ");
+                                 mvaddstr (20,9,"Special");
+                                 mvaddstr (22,9,"Exit   ");
+                                 }
+                        
+                        k=getch();
+                        
+                        if(k==KEY_DOWN&&xm<3)
+                                             xm++;
+                        
+                        if(k==KEY_UP&&xm>0)
+                                           xm--;
+                        if(k==VK_SPACE&&xm==1)
+                        {
+                                              return 1;
+                                              }
+                        if(k==VK_SPACE&&xm==0)
+                        {
+                                              return 4;
+                                              }
+                        }while(k!=VK_SPACE||xm!=3);  
+                        }
+                        else
+                        {
+                         mvaddstr (18,9,"Press  ");
+                         mvaddstr (19,9,"Space  ");
+                         mvaddstr (20,9,"for    ");
+                         mvaddstr (21,9,"Options");
+                         mvaddstr (22,9,"       ");
+                         mvaddstr (23,9,"       ");                       
+                         mvaddstr (18,1,"Player1");
+                         char x2[3],y2[3];
+                         itoa(x,x2,10);
+                         itoa(y,y2,10);
+                         mvaddstr (19,2,x2);
+                         mvaddstr (19,6,y2);                   
+                         }
+}
+void statusbar(int hqhp, int cash, int turns,int minihqs,int hqmoves,int Enemyhq)
+{//Enemyhero
+     char hqhealth[4],mola[15],phases[15],miniHqs[20],hqmove[2],enemyhq[4];
+     itoa(hqhp,hqhealth,10);
+     itoa(cash,mola,10);
+     itoa(turns,phases,10);
+     itoa(minihqs,miniHqs,10);
+     itoa(hqmoves,hqmove,10);
+     itoa(Enemyhq,enemyhq,10);
+     mvaddstr(18,17, "Hq hp:");
+    mvaddstr(18,25, hqhealth);
+    mvaddstr(19,17, "Cash:");
+    mvaddstr(19,25, mola);
+    mvaddstr(20,17, "Turns: ");
+    mvaddstr(20,25, phases);
+    mvaddstr(22,17, "Minihq:");
+    mvaddstr(22,25, miniHqs);
+    mvaddstr(21,17, "Hqmoves:");
+    mvaddstr(21,25, hqmove);
+    mvaddstr(22,17, "Enemyhero's life:");
+    mvaddstr(23,20, enemyhq); 
+     }
+     
+     
+int tiletype(int x,int y,int hqhp)
+    { /*  
+    A is headquarters 1 whit 20 hp
+    B is gunsoldier whit 3 hp 3move
+    C is gunsoldier 3 Hp 2move
+    D is gunsoldier 3 hp 1 move
+    E is gunsoldier 3 hp 0 move
+    */
+    if(map[x-2][y-2]=='A')
+    {
+    mvaddstr(20,1, "head   ");
+    mvaddstr(21,1, "quarter");
+    char hqhealth[4];
+    itoa(hqhp,hqhealth,10);
+    mvaddstr(22,1, "hp: ");
+    mvaddstr(22,6, hqhealth);
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='N')
+    {
+    mvaddstr(20,1, "City   ");
+    mvaddstr(21,1, "       ");
+    mvaddstr(22,1, "       ");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='O')
+    {
+    mvaddstr(20,1, " Mini  ");
+    mvaddstr(21,1, " Head  ");
+    mvaddstr(22,1, "Quarter");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='B')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   3");
+    mvaddstr(22,1, "move: 3");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='C')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   3");
+    mvaddstr(22,1, "move: 2");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='D')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   3");
+    mvaddstr(22,1, "move: 1");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='E')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   3");
+    mvaddstr(22,1, "move: 0");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='F')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   2");
+    mvaddstr(22,1, "move: 3");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='G')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   2");
+    mvaddstr(22,1, "move: 2");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='H')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   2");
+    mvaddstr(22,1, "move: 1");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='I')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   2");
+    mvaddstr(22,1, "move: 0");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='J')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   1");
+    mvaddstr(22,1, "move: 3");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='K')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   1");
+    mvaddstr(22,1, "move: 2");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='L')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   1");
+    mvaddstr(22,1, "move: 1");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='M')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   1");
+    mvaddstr(22,1, "move: 0");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='b')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   3");
+    mvaddstr(22,1, "move: 3");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='c')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   3");
+    mvaddstr(22,1, "move: 2");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='d')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   3");
+    mvaddstr(22,1, "move: 1");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='e')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   3");
+    mvaddstr(22,1, "move: 0");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='f')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   2");
+    mvaddstr(22,1, "move: 3");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='g')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   2");
+    mvaddstr(22,1, "move: 2");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='h')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   2");
+    mvaddstr(22,1, "move: 1");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='i')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   2");
+    mvaddstr(22,1, "move: 0");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='j')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   1");
+    mvaddstr(22,1, "move: 3");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='k')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   1");
+    mvaddstr(22,1, "move: 2");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='l')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   1");
+    mvaddstr(22,1, "move: 1");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='m')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   1");
+    mvaddstr(22,1, "move: 0");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='P')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   3");
+    mvaddstr(22,1, "move: 3");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='Q')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   3");
+    mvaddstr(22,1, "move: 2");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='R')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   3");
+    mvaddstr(22,1, "move: 1");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='S')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   3");
+    mvaddstr(22,1, "move: 0");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='T')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   2");
+    mvaddstr(22,1, "move: 3");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='U')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   2");
+    mvaddstr(22,1, "move: 2");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='V')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   2");
+    mvaddstr(22,1, "move: 1");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='W')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   2");
+    mvaddstr(22,1, "move: 0");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='X')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   1");
+    mvaddstr(22,1, "move: 3");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='Y')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   1");
+    mvaddstr(22,1, "move: 2");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='Z')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   1");
+    mvaddstr(22,1, "move: 1");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='[')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   1");
+    mvaddstr(22,1, "move: 0");
+    mvaddstr(23,1, "       ");
+    }
+    else
+    if(map[x-2][y-2]=='p')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   3");
+    mvaddstr(22,1, "move: 3");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='q')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   3");
+    mvaddstr(22,1, "move: 2");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='r')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   3");
+    mvaddstr(22,1, "move: 1");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='s')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   3");
+    mvaddstr(22,1, "move: 0");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='t')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   2");
+    mvaddstr(22,1, "move: 3");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='u')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   2");
+    mvaddstr(22,1, "move: 2");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='v')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   2");
+    mvaddstr(22,1, "move: 1");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='w')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   2");
+    mvaddstr(22,1, "move: 0");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='x')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   1");
+    mvaddstr(22,1, "move: 3");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='y')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   1");
+    mvaddstr(22,1, "move: 2");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]=='z')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   1");
+    mvaddstr(22,1, "move: 1");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    if(map[x-2][y-2]==']')
+    {
+    mvaddstr(20,1, "Soldier");
+    mvaddstr(21,1, "hp:   1");
+    mvaddstr(22,1, "move: 0");
+    mvaddstr(23,1, "Tired  ");
+    }
+    else
+    {
+    mvaddstr(20,1, "       ");
+    mvaddstr(21,1, "       ");
+    mvaddstr(22,1, "       ");
+    mvaddstr(23,1, "       ");
+}
+    }
+
+
+void tilepic(int x, int y)
+{ 
+                 int i,j;
+        if(gunsoldier(x,y))
+        {  
+        mvaddstr (18,50,"         ");
+        mvaddstr (19,50,"  /o\\    ");
+        mvaddstr (20,50," O-|-O   ");
+        mvaddstr (21,50,"   |     ");
+        mvaddstr (22,50,"  / \\    ");
+        mvaddstr (23,50," |   |   ");
+        for(i=18;i<24;i++)
+        for(j=58;j<79;j++)
+        mvaddstr (i,j," ");
+        }
+        else
+        if(map[x-2][y-2]=='A')
+        {  
+        mvaddstr (18,50,"    _____________________    ");
+        mvaddstr (19,50,"  _/_/_/_/_/_/O\\_\\_\\_\\_\\_\\_  ");
+        mvaddstr (20,50," /_________Apolion_________\\ ");
+        mvaddstr (21,50,"|o.o.o.o.o.o.o.o.o.o.o.o.o.o|");
+        mvaddstr (22,50,"|o.o.o.o.o.o.o.o.o.o.o.o.o.o|");
+        mvaddstr (23,50," \\_________________________/ ");
+        }
+        else
+        {
+        for(i=18;i<24;i++)
+        for(j=50;j<79;j++)
+        mvaddstr (i,j," ");
+        
+        }
+     }
+
+
+int objectprinting(int minihqs,int x, int y)
+{
+     long int i,j,k=0,xs[10000],ys[10000],t=0,et=0,xe[10000],ye[10000],told=0,etold=0;
+     
+     for(i=0;i<=14;i++)
+                       for(j=0;j<77;j++)
+                       {
+                       if(map[i][j] != VK_SPACE)
+                       {
+                       if(map[i][j]=='A')
+                       {
+                       mvaddstr(i+2,j+2, "@");
+                       xs[t]=i;
+                       ys[t]=j;
+                       t++;
+                       }
+                       else
+                       if(map[i][j]=='N')
+                       {
+                       mvaddstr(i+2,j+2, "C");
+                       }
+                       else
+                       if(map[i][j]=='O')
+                       {
+                       mvaddstr(i+2,j+2, "#");
+                       k++;
+                       xs[t]=i;
+                       ys[t]=j;
+                       t++;
+                       }
+                       else
+                       if(gunsoldier(i+2,j+2))
+                       {
+                       mvaddstr(i+2,j+2, "S");
+                       xs[t]=i;
+                       ys[t]=j;
+                       t++;
+                       }
+                       else
+                       if(map[i][j]=='0')
+                       {
+                       xe[et]=i;
+                       ye[et]=j;
+                       et++;
+                       }
+                       else
+                       if(enemygunsoldier(i+2,j+2))
+                       {
+                       xe[et]=i;
+                       ye[et]=j;
+                       et++;
+                       }
+                       else
+                       mvaddstr(i+2,j+2, "?");
+                       }
+                       }
+                       //printing enemy pieces
+                       etold=et;
+                       told=t;
+                       /* DEbuuging
+                       char te[5],it[5],sx[6],sy[6];
+                       itoa(et,te,10);
+                       mvaddstr(23,48, te);
+                       itoa(t,it,10);
+                       mvaddstr(22,48, it);
+                       j=2;
+                       for(i=0;i<t;i++)
+                       {
+                       itoa(xs[i],sx,10);
+                       mvaddstr(21,50+j+i, sx);
+                       itoa(ys[i],sy,10);
+                       mvaddstr(20,50+j+i, sy);
+                       j+=3;
+                       }
+                       */
+                       //beggining
+                       for(t=0;t<told;t++)
+                       for(et=0;et<etold;et++)
+                       {
+                       if(gunsoldier(xs[t]+2,ys[t]+2)&&(abs(xs[t]-xe[et])+abs(ys[t]-ye[et]))<=4)
+                       {
+                                                                 if(enemygunsoldier(xe[et]+2,ye[et]+2))
+                                                                 mvaddstr(xe[et]+2,ye[et]+2, "P");
+                       
+                                                                 else
+                                                                 mvaddstr(xe[et]+2,ye[et]+2, "0");
+                       
+                       }
+                       else
+                       if(map[xs[t]][ys[t]]=='A')                                
+                       if(abs(xs[t]-xe[et])+abs(ys[t]-ye[et])<=15)
+                       {
+                                                                  if(enemygunsoldier(xe[et]+2,ye[et]+2))
+                                                                 mvaddstr(xe[et]+2,ye[et]+2, "P");
+                                                                 else
+                                                                 mvaddstr(xe[et]+2,ye[et]+2, "0");
+                       }
+                       }
+                       
+                       return k;
+     }
+
+
+
+
+int headquartersmoved(int x,int y,int hqmoves)
+{
+     int move=hqmoves,k,xold=0,yold=0,i=x,j=y;
+     char movehq[3];
+     //something funny happens at 3
+     if(move==3)
+     move=2;
+     mvaddstr (20,9,"Press  ");
+     mvaddstr (21,9,"\"c\" to ");
+     mvaddstr (22,9,"cancel ");
+     do{
+                         mvaddstr (xold,yold," ");
+                         mvaddstr (x,y,"@");  
+                         itoa(move,movehq,10);
+                         mvaddstr (18,9,"moves:");
+                         mvaddstr (19,9,"       ");
+                         mvaddstr (19,13,movehq);
+                         k=getch();
+                         if(move>0)
+                         {
+                         xold=x;
+                         yold=y;
+                         }
+                         if(k==KEY_DOWN&&x<16&&move>0&&map[x-1][y-2]==' ')
+                         {
+                                              x++;        
+                                              move--;
+                                              }
+                         else
+                         if(k==KEY_RIGHT&&y<78&&move>0&&map[x-2][y-1]==' ')
+                         {                     
+                                               y++;
+                                               move--;
+                                               }                 
+                         else
+                         if(k==KEY_LEFT&&y>2&&move>0&&map[x-2][y-3]==' ')
+                         {
+                                             y--;        
+                                             move--;
+                                             }                  
+                         else
+                         if(k==KEY_UP&&x>2&&move>0&&map[x-3][y-2]==' ')
+                         {
+                                           x--;        
+                                           move--;
+                                           }
+                         else
+                         if(k==VK_SPACE)
+                         {
+                                        map[i-2][j-2]=VK_SPACE;
+                                        map[x-2][y-2]='A';
+                                        return move;
+                                        }                 
+                         }while(k!='c');
+                         mvaddstr (x,y," ");
+                         return hqmoves;
+     }
+
+
+
+int charactermoves(int x,int y)
+{
+    if(map[x-2][y-2]=='B'||map[x-2][y-2]=='b'||map[x-2][y-2]=='F'||map[x-2][y-2]=='f'||map[x-2][y-2]=='J'||map[x-2][y-2]=='j')
+    return 3;
+    if(map[x-2][y-2]=='C'||map[x-2][y-2]=='c'||map[x-2][y-2]=='G'||map[x-2][y-2]=='g'||map[x-2][y-2]=='K'||map[x-2][y-2]=='k')
+    return 2;
+    if(map[x-2][y-2]=='D'||map[x-2][y-2]=='d'||map[x-2][y-2]=='H'||map[x-2][y-2]=='h'||map[x-2][y-2]=='L'||map[x-2][y-2]=='l')
+    return 1;
+    if(map[x-2][y-2]=='E'||map[x-2][y-2]=='e'||map[x-2][y-2]=='I'||map[x-2][y-2]=='i'||map[x-2][y-2]=='M'||map[x-2][y-2]=='m')
+    return 0;
+}
+ 
+
+
+char characterprintg(int x, int y, int move)
+{
+                     if(gunsoldier(x,y))
+                     {
+                     if(move==3)
+                     {
+                     if(map[x-2][y-2]=='B')
+                     return 'B';
+                     else
+                     if(map[x-2][y-2]=='b')
+                     return 'b';
+                     else
+                     if(map[x-2][y-2]=='F')
+                     return 'F';
+                     else
+                     if(map[x-2][y-2]=='f')
+                     return 'f';
+                     if(map[x-2][y-2]=='J')
+                     return 'J';
+                     else
+                     if(map[x-2][y-2]=='j')
+                     return 'j';
+                     }
+                     else
+                     if(move==2)
+                     {
+                     if(map[x-2][y-2]=='B'||map[x-2][y-2]=='C') 
+                     return 'C';
+                     else
+                     if(map[x-2][y-2]=='b'||map[x-2][y-2]=='c') 
+                     return 'c';
+                     else
+                     if(map[x-2][y-2]=='F'||map[x-2][y-2]=='G') 
+                     return 'G';
+                     else
+                     if(map[x-2][y-2]=='f'||map[x-2][y-2]=='g') 
+                     return 'g';
+                     else
+                     if(map[x-2][y-2]=='J'||map[x-2][y-2]=='K') 
+                     return 'K';
+                     else
+                     if(map[x-2][y-2]=='j'||map[x-2][y-2]=='k') 
+                     return 'k';
+                     
+                     }
+                     else
+                     if(move==1)
+                     {
+                     if(map[x-2][y-2]=='B'||map[x-2][y-2]=='C'||map[x-2][y-2]=='D') 
+                     return 'D';
+                     else
+                     if(map[x-2][y-2]=='b'||map[x-2][y-2]=='c'||map[x-2][y-2]=='d') 
+                     return 'd';
+                     else
+                     if(map[x-2][y-2]=='F'||map[x-2][y-2]=='G'||map[x-2][y-2]=='H') 
+                     return 'H';
+                     else
+                     if(map[x-2][y-2]=='f'||map[x-2][y-2]=='g'||map[x-2][y-2]=='h') 
+                     return 'h';
+                     else
+                     if(map[x-2][y-2]=='J'||map[x-2][y-2]=='K'||map[x-2][y-2]=='L') 
+                     return 'L';
+                     else
+                     if(map[x-2][y-2]=='j'||map[x-2][y-2]=='k'||map[x-2][y-2]=='l') 
+                     return 'l';
+                     }
+                     
+                     
+                     else
+                     
+                     if(move==0) 
+                     {
+                     if(map[x-2][y-2]=='B'||map[x-2][y-2]=='C'||map[x-2][y-2]=='D'||map[x-2][y-2]=='E')
+                     return 'E';
+                     else
+                     if(map[x-2][y-2]=='b'||map[x-2][y-2]=='c'||map[x-2][y-2]=='d'||map[x-2][y-2]=='e')
+                     return 'e';
+                     else
+                     if(map[x-2][y-2]=='F'||map[x-2][y-2]=='G'||map[x-2][y-2]=='H'||map[x-2][y-2]=='I')
+                     return 'I';
+                     else
+                     if(map[x-2][y-2]=='f'||map[x-2][y-2]=='g'||map[x-2][y-2]=='h'||map[x-2][y-2]=='i')
+                     return 'i';
+                     else
+                     if(map[x-2][y-2]=='J'||map[x-2][y-2]=='K'||map[x-2][y-2]=='L'||map[x-2][y-2]=='M')
+                     return 'M';
+                     else
+                     if(map[x-2][y-2]=='j'||map[x-2][y-2]=='k'||map[x-2][y-2]=='l'||map[x-2][y-2]=='m')
+                     return 'm';
+                     }
+                     }
+                      else
+                      {}
+}
+ 
+
+
+void custommovecursor(int x, int y,int i,int j)
+{
+                       if(gunsoldier(i,j))   
+                       mvaddstr (x,y,"S"); 
+                       else
+                       mvaddstr (x,y,"?");  
+                       }
+
+
+int objectmove(int x,int y)
+{
+     int move=charactermoves(x,y),k,xold=0,yold=0,i=x,j=y;
+     char moves[3];
+     if(move==0)
+     return 0;
+     mvaddstr (20,9,"Press  ");
+     mvaddstr (21,9,"\"c\" to ");
+     mvaddstr (22,9,"cancel ");
+     mvaddstr (18,9,"moves:");
+     do{              
+                         mvaddstr (xold,yold," ");
+                         //how does it look cooler custom or this way
+                         custommovecursor(x,y,i,j) ;
+                         itoa(move,moves,10);
+                         mvaddstr (19,9,"       ");
+                         mvaddstr (19,13,moves);
+                         k=getch();
+                         if(move>0)
+                         {
+                         xold=x;
+                         yold=y;
+                         }
+                         if(k==KEY_DOWN&&x<16&&move>0&&map[x-1][y-2]==' ')
+                         {
+                                              x++;        
+                                              move--;
+                                              }
+                         else
+                         if(k==KEY_RIGHT&&y<78&&move>0&&map[x-2][y-1]==' ')
+                         {                     
+                                               y++;
+                                               move--;
+                                               }                 
+                         else
+                         if(k==KEY_LEFT&&y>2&&move>0&&map[x-2][y-3]==' ')
+                         {
+                                             y--;        
+                                             move--;
+                                             }                  
+                         else
+                         if(k==KEY_UP&&x>2&&move>0&&map[x-3][y-2]==' ')
+                         {
+                                           x--;        
+                                           move--;
+                                           }
+                         else
+                         if(k==VK_SPACE)
+                         {
+                                        map[x-2][y-2]=characterprintg(i,j,move);
+                                        if(move!=charactermoves(i,j))
+                                        map[i-2][j-2]=VK_SPACE;
+                                        return 0;
+                                        }                 
+                         }while(k!='c');
+                         mvaddstr (x,y," ");
+     }
+     
+bool gunsoldier3hp(int xs, int ys)
+{
+     if(map[xs-2][ys-2]=='B'||map[xs-2][ys-2]=='C'||map[xs-2][ys-2]=='D'||map[xs-2][ys-2]=='E'||map[xs-2][ys-2]=='b'||map[xs-2][ys-2]=='c'||map[xs-2][ys-2]=='d'||map[xs-2][ys-2]=='e')
+     return TRUE;
+     else
+     return FALSE;
+     }     
+     
+bool gunsoldier2hp(int xs, int ys)
+{
+     if(map[xs-2][ys-2]=='F'||map[xs-2][ys-2]=='G'||map[xs-2][ys-2]=='H'||map[xs-2][ys-2]=='I'||map[xs-2][ys-2]=='f'||map[xs-2][ys-2]=='g'||map[xs-2][ys-2]=='h'||map[xs-2][ys-2]=='i')
+     return TRUE;
+     else
+     return FALSE;
+     }
+     
+
+bool gunsoldier1hp(int xs, int ys)
+{
+     if(map[xs-2][ys-2]=='J'||map[xs-2][ys-2]=='K'||map[xs-2][ys-2]=='L'||map[xs-2][ys-2]=='M'||map[xs-2][ys-2]=='j'||map[xs-2][ys-2]=='k'||map[xs-2][ys-2]=='l'||map[xs-2][ys-2]=='m')
+     return TRUE;
+     else
+     return FALSE;
+     }
+
+bool enemygunsoldier3hp(int xs, int ys)
+{
+     if(map[xs-2][ys-2]=='P'||map[xs-2][ys-2]=='Q'||map[xs-2][ys-2]=='R'||map[xs-2][ys-2]=='S'||map[xs-2][ys-2]=='p'||map[xs-2][ys-2]=='q'||map[xs-2][ys-2]=='r'||map[xs-2][ys-2]=='s')
+     return TRUE;
+     else
+     return FALSE;
+     }     
+     
+bool enemygunsoldier2hp(int xs, int ys)
+{
+     if(map[xs-2][ys-2]=='T'||map[xs-2][ys-2]=='U'||map[xs-2][ys-2]=='V'||map[xs-2][ys-2]=='W'||map[xs-2][ys-2]=='t'||map[xs-2][ys-2]=='v'||map[xs-2][ys-2]=='u'||map[xs-2][ys-2]=='w')
+     return TRUE;
+     else
+     return FALSE;
+     }
+     
+
+bool enemygunsoldier1hp(int xs, int ys)
+{
+     if(map[xs-2][ys-2]=='X'||map[xs-2][ys-2]=='Y'||map[xs-2][ys-2]=='Z'||map[xs-2][ys-2]=='['||map[xs-2][ys-2]=='x'||map[xs-2][ys-2]=='y'||map[xs-2][ys-2]=='z'||map[xs-2][ys-2]==']')
+     return TRUE;
+     else
+     return FALSE;
+     }
+void unitatacked(int x,int y, int xs, int ys)
+{
+     //first we find the attacker and then the attack
+     int characternumber;
+     if(gunsoldier(x,y))
+     {
+                        ///atacker is gun soldier
+                        if(gunsoldier(xs,ys))
+                        {
+                                           //attacked is also gun soldier
+                                           //clasify them by hp
+                                           if(gunsoldier3hp(xs,ys))
+                                           {
+                                           characternumber=(int)map[xs-2][ys-2]+4; 
+                                           map[xs-2][ys-2]=(char)characternumber;  
+                                           }
+                                           else
+                                           if(gunsoldier2hp(xs,ys))
+                                           {
+                                           characternumber=(int)map[xs-2][ys-2]+4; 
+                                           map[xs-2][ys-2]=(char)characternumber;
+                                           }
+                                           else
+                                           if(gunsoldier1hp(xs,ys))
+                                           map[xs-2][ys-2]=VK_SPACE;
+                                           }
+                                           else
+                                           if(enemygunsoldier3hp(xs,ys))
+                                           {
+                                           characternumber=(int)map[xs-2][ys-2]+4; 
+                                           map[xs-2][ys-2]=(char)characternumber;  
+                                           }
+                                           else
+                                           if(enemygunsoldier2hp(xs,ys))
+                                           {
+                                           characternumber=(int)map[xs-2][ys-2]+4; 
+                                           map[xs-2][ys-2]=(char)characternumber;  
+                                           }
+                                           else
+                                           if(enemygunsoldier1hp(xs,ys))
+                                           {
+                                           map[xs-2][ys-2]=VK_SPACE;
+                                           }
+     }
+     else{}
+ }
+
+
+int attack(int x,int y,int hqhp)
+{
+               /*  
+               A is headquarters
+               B is gunsoldier whit 3 hp, 3move, 1at, 3 range
+               b is gunsoldier whit 3 hp, 3move, 1at, 3 range who already attak
+               C is gunsoldier 3 Hp 2move, 1 attack, 4 range
+               c alreeady attak
+               D is gunsoldier 3 hp 1 move, 1 attack, 4 range
+               d already attak
+               E is gunsoldier 3 hp 0 move, 1 attack, 4 range
+               e already attak
+               */
+               int k, xm=0,i=0,j=0,xs[52],ys[52],t=0,told=0;
+               if(islower(map[x-2][y-2]))
+               return hqhp;
+               else
+               if(gunsoldier(x,y))
+               {
+               
+                         mvaddstr (18,9,"Atk:  1");
+                         mvaddstr (19,9,"Rng:  4");
+                         mvaddstr (20,9,"       ");
+                         mvaddstr (21,9,"Press  ");
+                         mvaddstr (22,9,"\"c\" to ");
+                         mvaddstr (23,9,"cancel ");
+                         for(i=x-3;i<x+4;i++)
+                         for(j=y-3;j<y+4;j++)
+                         if(map[i-2][j-2]!=VK_SPACE&&i>2&&i<16&&j>1&&j<79)
+                         if(abs(i-x)+abs(j-y)<4)
+                         if(i!=x||j!=y)
+                         {
+                         mvaddstr (i,j,"!");
+                         xs[t]=i;
+                         ys[t]=j;
+                         t++;
+                         }
+                         if(t==0)
+                         {
+                                 mvaddstr (18,9,"No     ");
+                                 mvaddstr (19,9,"Target ");
+                                 mvaddstr (20,9,"       ");
+                                 mvaddstr (21,9,"       ");
+                                 mvaddstr (22,9,"       ");
+                                 mvaddstr (23,9,"       ");
+                                 return hqhp;
+                                 }
+                         t--;
+                         i=t;
+                         do{
+                         mvaddstr (xs[told],ys[told],"!");
+                         mvaddstr (xs[t],ys[t],"X");
+                         tiletype(xs[t],ys[t],hqhp);
+                         k=getch();
+                         told=t;
+                         if(k==KEY_DOWN&&t<i)
+                         {
+                                              t++;
+                                              }                  
+                         else
+                         if(k==KEY_UP&&t>0)
+                         {
+                                      t--;
+                                      }
+                         else
+                         if(k==VK_SPACE)
+                         {
+                                        if(map[xs[t]-2][ys[t]-2]=='A')
+                                        hqhp--;
+                                        else
+                                        unitatacked(x,y,xs[t],ys[t]);
+                                        map[x-2][y-2]=tolower(map[x-2][y-2]);
+                                        return hqhp;
+                                        }                                                                                                                                              
+                         }while(k!='c');
+                         return hqhp;
+                         }
+               else
+               return hqhp;
+               
+}
+int randommoveEnemypiece(int x,int y)
+{
+              int directionx=0,directiony=0,r=0,xold=0,yold=0;
+              if(enemygunsoldier(x,y))
+              {
+                                      
+                                      xold=x;
+                                      yold=y;
+                                      do{
+                                      y=yold;
+                                      x=xold;
+                                      srand(100*sqrt(time(NULL))*time(NULL));
+                                      r=rand();
+                                      directionx=rand();
+                                      r=(r*3/37676);
+                                      directionx=(directionx*2/37676);
+                                      if(directionx==1)
+                                      x+=r;
+                                      else
+                                      x-=r;
+                                      y-=(3-r);
+                                      }while(x<2||x>16||y<2||map[x-2][y-2]!=VK_SPACE);
+                                      map[xold-2][yold-2]=VK_SPACE;
+                                      map[x-2][y-2]='P';
+                                      mvaddstr (xold,yold," ");
+                                      mvaddstr (x,y,"P");
+                                      //getch();
+                                      }
+              else
+              if(map[x-2][y-2]=='0')
+              {
+                                    }
+}
+
+int enemypiesesaction(int tid,int xs,int ys,int xe,int ye,int pdistances)
+{
+    
+}
+int Endturn(bool Aiactive)
+{
+                 if(Aiactive)
+                 {//ther is an ai
+                       mvaddstr (18,1,"AIsturn");  
+                       //search for ai pieces
+                       long int i,j,k=0,xe[10000],ye[10000],et=0,x,y,etold=0;
+                       long int pdistances[1000],tid=0;
+                       for(i=0;i<=14;i++)
+                       for(j=0;j<77;j++)
+                       {
+                       if(map[i][j] != VK_SPACE)
+                       {
+                       if(map[i][j]=='0')
+                       {
+                       x=i+2;
+                       y=j+2;
+                       }
+                       else
+                       if(enemygunsoldier(i+2,j+2))
+                       {
+                       xe[et]=i+2;
+                       ye[et]=j+2;
+                       et++;
+                       }
+                       }
+                       }
+                       
+                       //fiding distance between piece and ai and sorting them from bigger to smaller 
+                       //this means that the bigger is first in array
+                       etold=et;
+                       char dist[5];
+                       int distances[1000];
+                       for(et=0;et<=etold-1;et++)
+                       {
+                       distances[et]=abs(x-xe[et])+abs(y-ye[et]);
+                       }
+                       
+                       int temp;
+                       for(i=0;i<=et-2;i++)
+                               for(j=i+1;j<=et-1;j++)
+                                      if(distances[i]<distances[j]){
+                                           temp=distances[i];
+                                           distances[i]=distances[j];
+                                           distances[j]=temp;
+                                           temp=xe[i];
+                                           xe[i]=xe[j];
+                                           xe[j]=temp;
+                                           temp=ye[i];
+                                           ye[i]=ye[j];
+                                           ye[j]=temp;      
+                                                   }
+                 //searching for enemy pieces
+                       int ys[10000],xs[10000],t=0,told=0;
+                       etold=et;
+                       for(et=0;et<etold;et++)
+                       for(i=xe[et]-4;i<=xe[et]+4;i++)
+                         for(j=ye[et]-4;j<=ye[et]+4;j++)
+                         if(map[i-2][j-2]!=VK_SPACE&&i>2&&i<16&&j>1&&j<79&&map[i-2][j-2]!='N')
+                         if((abs(i-xe[et])+abs(j-ye[et]))<5)
+                         if(map[i-2][j-2]!='0'&&!enemygunsoldier(i,j))
+                         {
+                         mvaddstr (i,j,"!");
+                         xs[t]=i;
+                         ys[t]=j;
+                         t++;
+                         }
+                         //mvaddstr (i,j,"!");
+                         //after finding them
+                         if(t==0)
+                         {
+                                 for(etold=0;etold<=et;etold++)
+                                 if(distances[etold]>2)
+                                 randommoveEnemypiece(xe[etold],ye[etold]);
+                                 else
+                                 {}
+                                 }
+                         else
+                         {
+                                 t--;
+                                 //eliminating repeated pieces
+                                 told=0;
+                                 for(i=1;i<t;i++)
+                                 for(j=0;j<t-1;j++)
+                                               if(xs[j]==xs[i]&&ys[j]==ys[i])
+                                               {
+                                                      temp=ys[i];
+                                                      ys[i]=ys[j];
+                                                      ys[j]=temp;
+                                                      temp=xs[i];
+                                                      xs[i]=xs[j];
+                                                      xs[j]=temp;
+                                                      told++;
+                                                                               
+                                               }
+                                 told--;
+                                 t+=(-told);
+                             //finding the distances between enemy piece palyer's piece
+                             //distance from pieces && course of action
+                             for(etold=0;etold<et;etold++)
+                             for(told=t;told<=t;told++)
+                             {
+                             pdistances[tid]=abs(xs[told]-xe[etold])+abs(ys[told]-ye[etold]);
+                             enemypiesesaction(tid,xs[told],ys[told],xe[etold],ye[etold],pdistances[tid]);
+                             tid++;
+                             }
+                                                          
+                             
+                             }
+                 //DEbuuging
+                 //switch to et to get enmey
+                 //switch to t to get player
+                       char te[5],sx[6],sy[6],tkui[10];
+                       itoa(et,te,10);
+                       mvaddstr(23,48, te);
+                       itoa(x,te,10);
+                       mvaddstr(22,48, te);
+                       itoa(y,te,10);
+                       mvaddstr(21,48, te);
+                       itoa(t,tkui,10);
+                       mvaddstr(19,48, tkui);
+                       j=2;
+                       for(i=0;i<et;i++)
+                       {
+                       itoa(xs[i],sx,10);
+                       mvaddstr(21,50+j+i, sx);
+                       itoa(ys[i],sy,10);
+                       mvaddstr(20,50+j+i, sy);
+                       itoa(pdistances[i],dist,10);
+                       mvaddstr(16,j+i,dist);
+                       j+=3;
+                       }
+                 
+                 getch();
+                 }
+                 else
+                 {//ther is player 2
+                     }
+         }
+int playeronereset(int hqmoves)
+{
+                
+                int i,j;
+                for(i=0;i<=14;i++)
+                       for(j=0;j<77;j++)
+                       {
+                            if(map[i][j] != VK_SPACE)
+                            {
+                                    if(islower(map[i][j]))
+                                    {
+                                    map[i][j]=toupper(map[i][j]);
+                                    }
+                                    if(map[i][j]=='C'||map[i][j]=='D'||map[i][j]=='E')
+                                    map[i][j]='B';
+                                    else
+                                    if(map[i][j]=='G'||map[i][j]=='H'||map[i][j]=='I')
+                                    map[i][j]='F';
+                                    else
+                                    if(map[i][j]=='K'||map[i][j]=='L'||map[i][j]=='M')
+                                    map[i][j]='J';
+                                    else
+                                    {}
+                            }
+                                    
+                       }
+                       return 5;
+}
+int cashadder(int minihqs,int cash)
+{
+                  int i=cash;
+                  cash+=(minihqs)*5+10;
+                      
+    
+}
+int createminihq(int x,int y,int cash)
+{
+                         int k, xm=0,i=0,j=0,xs[10],ys[10],t=0,told=0;
+                                             mvaddstr (18,9,"canonly");
+                                             mvaddstr (19,9,"buil on");
+                                             mvaddstr (20,9,"top of ");
+                                             mvaddstr (21,9," City  ");
+                                             mvaddstr (22,9,"\"c\" to ");
+                                             mvaddstr (23,9,"cancel ");
+                                             for(i=x-1;i<x+2;i++)
+                                             for(j=y-1;j<y+2;j++)
+                                             if(map[i-2][j-2]=='N'&&i>2&&i<16&&j>1&&j<78)
+                                             if(abs(i-x)+abs(j-y)<2)
+                                             {
+                                             xs[t]=i;
+                                             ys[t]=j;
+                                             t++;
+                                             }
+                                             t--;
+                                             i=t;
+                                             do{
+                                             mvaddstr (xs[told],ys[told]," ");
+                                             mvaddstr (xs[t],ys[t],"X");
+                                             k=getch();
+                                             told=t;
+                                              if(k==KEY_DOWN&&t<i)
+                                              {
+                                                                  t++;
+                                               }                  
+                                               else
+                                               if(k==KEY_UP&&t>0)
+                                               {
+                                               t--;
+                                               }
+                                               if(k==VK_SPACE)
+                                               {
+                                                              map[xs[t]-2][ys[t]-2]='O';
+                                                              cash+=(-20);
+                                                              break;
+                                               }                                                                                                                                              
+                                               }while(k!='c');
+                                               return cash;
+}
+int buysoldier(int x,int y, int cash)
+{
+                                             int k, xm=0,i=0,j=0,xs[10],ys[10],t=0,told=0;
+                                             mvaddstr (19,9,"Press  ");
+                                             mvaddstr (20,9,"\"c\" to ");
+                                             mvaddstr (21,9,"cancel ");
+                                             mvaddstr (22,9,"       ");
+                                             for(i=x-1;i<x+2;i++)
+                                             for(j=y-1;j<y+2;j++)
+                                             if(map[i-2][j-2]==VK_SPACE&&i>2&&i<16&&j>1&&j<78)
+                                             if(abs(i-x)+abs(j-y)<2)
+                                             if(i!=x||j!=y)
+                                             {
+                                             xs[t]=i;
+                                             ys[t]=j;
+                                             t++;
+                                             }
+                                             t--;
+                                             i=t;
+                                             do{
+                                             mvaddstr (xs[told],ys[told]," ");
+                                             mvaddstr (xs[t],ys[t],"X");
+                                             k=getch();
+                                             told=t;
+                                              if(k==KEY_DOWN&&t<i)
+                                              {
+                                                                  t++;
+                                               }                  
+                                               else
+                                               if(k==KEY_UP&&t>0)
+                                               {
+                                               t--;
+                                               }
+                                               if(k==VK_SPACE)
+                                               {
+                                                              map[xs[t]-2][ys[t]-2]='B';
+                                                              cash+=(-5);
+                                                              break;
+                                               }                                                                                                                                              
+                                               }while(k!='c');
+                                               return cash;
+     
+     }
+int CreateTroop(int x,int y,int cash)
+{
+                    
+                    int k, xm=0,i=0,j=0,xs[10],ys[10],t=0,told=0;
+                    mvaddstr (18,9,"<<<<<<<");
+                    mvaddstr (23,9,">>>>>>>");
+                    do{
+                        
+                        if(xm==0)
+                        {
+                                 mvaddstr (19,9,"Soldier");
+                                 mvaddstr (20,9,"Hp:3   ");
+                                 mvaddstr (21,9,"At:1   ");
+                                 mvaddstr (22,9,"Cost:5$");
+                        }
+                        if(xm==1)
+                        {
+                                 mvaddstr (19,9,"???????");
+                                 mvaddstr (20,9,"Blocked");
+                                 mvaddstr (21,9,"???????");
+                                 mvaddstr (22,9,"???????");
+                        }
+                        if(xm==2)
+                        {
+                                 mvaddstr (19,9,"MiniHq:");
+                                 mvaddstr (20,9,"every  ");
+                                 mvaddstr (21,9,"turnadd");
+                                 mvaddstr (22,9,"5$  c20");
+                                 }
+                        if(xm==3)
+                        {
+                                 mvaddstr (19,9,"!!!!!!!");
+                                 mvaddstr (20,9,"!Exit !");
+                                 mvaddstr (21,9,"!Exit !");
+                                 mvaddstr (22,9,"!!!!!!!");
+                                 }
+                        
+                        k=getch();
+                        
+                        if(k==KEY_RIGHT&&xm<3)
+                                             xm++;
+                        else
+                        if(k==KEY_LEFT&&xm>0)
+                                            xm--;
+                        else
+                        if(k==VK_SPACE&&xm==0&&cash>0)
+                        {
+                                            cash=buysoldier(x,y,cash);
+                                            break;
+                                            }
+                        else
+                        if(k==VK_SPACE&&xm==2&&cash>0)
+                        {
+                                              
+                                              cash=createminihq(x,y,cash);
+                                              break;
+                                              }
+                        }while(k!=VK_SPACE||xm!=3);
+                    
+                    return cash;
+}
+int main()
+{
+    int i,j,xold=0,yold=0,x=2,y=2,k=0;
+    bool menuscreen=FALSE,Aiactive=TRUE;
+    long int hqhp=20, cash=40, turns=0, Enemyhq=20,hqmoves=5,minihqs=0;
+    //map debugging
+    for(i=0;i<=14;i++)
+                     {
+                     for(j=0;j<77;j++)
+                     printf("%c",map[i][j]);
+                     printf("\n");
+                     }
+    system("pause");
+    //code beggins
+
+    initscr ();
+    noecho();
+    keypad (stdscr, TRUE);
+    curs_set(0);
+    
+    
+    //drawing board
+    for(i=1;i<=79;i++)
+    {
+                      mvaddstr (1,i,"_");
+                      mvaddstr (17,i,"_");
+                      }  
+    for(i=2;i<17;i++)
+    {
+                 mvaddstr (i,1,"|");
+                 mvaddstr (i,79,"|");
+                 }
+    mvaddstr (18,40,"Tile pic:");
+    for(i=18;i<24;i++)
+        {
+                 mvaddstr (i,49,"|");
+                 mvaddstr (i,79,"|");
+        }
+    //menu screen
+    for(i=18;i<24;i++)
+    {
+                    mvaddstr (i,8,"|");
+                    mvaddstr (i,16,"|");
+                    }
+    //bottom of screen
+    for(i=1;i<=79;i++)
+    {
+                      mvaddstr (24,i,"_");
+                      }
+    //drawing player 1
+    player1(x,y,xold,yold);
+    //code starts
+    do{
+       minihqs=objectprinting(minihqs,x,y);
+       tilepic(x,y);
+       optionsplayer1(x,y,menuscreen);
+       menuscreen=FALSE;
+       if(optionsplayer1(x,y,menuscreen)==1&&hqmoves>0)
+       {
+                                            hqmoves=headquartersmoved(x,y,hqmoves);
+                                            }
+       else
+       if(optionsplayer1(x,y,menuscreen)==2)
+       {
+                                            objectmove(x,y);
+                                            }
+       else
+       if(optionsplayer1(x,y,menuscreen)==3)
+       {
+                                            hqhp=attack(x,y,hqhp);
+                                            }
+       else
+       if(optionsplayer1(x,y,menuscreen)==4)
+       {
+                                            cash=CreateTroop(x,y,cash);
+                                            }
+       minihqs=objectprinting(minihqs,x,y);
+       statusbar(hqhp,cash,turns,minihqs,hqmoves,Enemyhq);
+       k=getch();
+       //footsteps
+       xold=x;
+       yold=y;
+       //controls
+       player1(x,y,xold,yold);
+       if(k==KEY_DOWN&&x<16)
+       x++;
+       else
+       if(k==KEY_RIGHT&&y<78)
+       y++;                 
+       else
+       if(k==KEY_LEFT&&y>2)
+       y--;
+       else
+       if(k==KEY_UP&&x>2)
+       x--;
+       else
+       if(k==VK_SPACE&&map[x-2][y-2]!=VK_SPACE&&!enemygunsoldier(x,y)&&map[x-2][y-2]!='0')
+       {
+                       menuscreen=TRUE;
+       }
+       else
+       if(k==VK_SPACE&&map[x-2][y-2]==VK_SPACE)
+       {
+                                     k=endturnoptions();
+                                     
+                                     }
+       if(k=='e')
+       {
+                 Endturn(Aiactive);
+                 hqmoves=playeronereset(hqmoves);
+                 cash=cashadder(minihqs,cash);
+                 turns++;
+                 }
+       
+       player1(x,y,xold,yold);
+       minihqs=objectprinting(minihqs,x,y);
+       tiletype(x,y,hqhp);
+       statusbar(hqhp,cash,turns,minihqs,hqmoves,Enemyhq);
+    
+    }while(k!=VK_ESCAPE);
+    
+    endwin();
+    return 0;
+}
